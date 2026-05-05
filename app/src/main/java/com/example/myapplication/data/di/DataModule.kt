@@ -14,6 +14,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DataModule {
 
+
     @Provides
     @Singleton
     fun provideOptionMapper() = OptionMapper()

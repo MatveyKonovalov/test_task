@@ -29,11 +29,15 @@ import com.example.myapplication.domain.Variet
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.TextButton
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
 @Composable
 fun MainScreen(viewModel: MainScreenViewModel) {
+    LaunchedEffect(Unit) {
+        viewModel.loadOptions()
+    }
     val open by viewModel.open.collectAsStateWithLifecycle()
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -43,8 +47,8 @@ fun MainScreen(viewModel: MainScreenViewModel) {
             .padding(15.dp)
     ) {
         Menu(viewModel)
-        if (open){
-            OpenDialog(funcAdd = viewModel::add, onDismiss = {viewModel.open()})
+        if (open) {
+            OpenDialog(funcAdd = viewModel::add, onDismiss = { viewModel.open() })
         }
         Spacer(modifier = Modifier.weight(1f))
         AddButton({ viewModel.open() })
@@ -82,12 +86,11 @@ fun AddButton(funcOpen: () -> Unit) {
 @Composable
 fun OpenDialog(funcAdd: (String) -> Unit, onDismiss: () -> Unit) {
     var newOption by remember { mutableStateOf("") }
-    val title = rememberSaveable { mutableStateOf("Новая опция") }
 
     AlertDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
-            TextButton(onClick = {funcAdd(newOption)} ) {
+            TextButton(onClick = { funcAdd(newOption) }) {
                 Text("Добавить")
             }
         },
@@ -101,11 +104,11 @@ fun OpenDialog(funcAdd: (String) -> Unit, onDismiss: () -> Unit) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.Center
-            ){
+            ) {
                 OutlinedTextField(
                     value = newOption,
-                    onValueChange = {newOption = it},
-                    label = {Text("Новая опция")},
+                    onValueChange = { newOption = it },
+                    label = { Text("Новая опция") },
                     shape = RoundedCornerShape(16)
                 )
             }
